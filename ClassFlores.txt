@@ -1,0 +1,227 @@
+Classificação de flores
+
+Este exercício se baseia numa prova prática aplicada pelo Professor Teo de Campos em 2018.
+
+Sua tarefa é implementar o classificador de K-vizinhos mais próximos usando apenas as bibliotecas stdio.h e math.h.
+
+Trata-se de um dos classificadores mais simples para aprendizado de máquina ou reconhecimento de padrões.
+
+Como todo classificador desse tipo, ele possui uma fase de treinamento e uma fase de teste. Na fase de treinamento, são dadas amostras para as quais sabemos seus rótulos. Já na fase de teste, a ideia é inferir rótulos para novas amostras. 
+
+Nesta prova, sua tarefa é classificar amostras da Iris dataset, um dos conjuntos de dados mais usado para testar algoritmos de aprendizado de máquina. Trata-se da classificação de espécies de flores do gênero lírios (em inglês, iris). Cada amostra é um vetor de D=4 dimensões que descreve uma flor de acordo com medidas estas medidas:
+
+    comprimento da sépala (folhas que "sustentam" as pétalas)
+    largura da sépala
+    comprimento da pétala
+    largura da pétala
+
+Essas medidas são dadas centímetros (números Reais). Cada flor é rotulada como uma dessas três espécies (em aprendizado de máquina, o valor de um rótulo é chamado de classe):
+
+    0: Iris Setosa
+    1: Iris Versicolor
+    2: Iris Virginica
+
+Para simplificar o trabalho, neste exercício, os rótulos foram convertidos para os três valores dados acima (0, 1 ou 2).
+
+No classificador de K vizinhos mais próximos, como o próprio nome diz, a inferência de um vetor de teste é feita baseada no rótulo dos K vetores de treinamento que são mais próximos dele. Ou seja, o seguinte algoritmo é aplicado:
+
+    Leia o valor de K, um número inteiro.
+    Leia o valor de Ntrain, um número inteiro que indica quantas amostras de treinamento serão dadas.
+    Leia o valor de Ntest, um número inteiro que indica quantas amostras de teste serão dadas.
+    Leia todos os vetores de treinamento Xtrain, ou seja, leia uma matriz de Ntrain linhas e D colunas, onde cada linha representa uma amostra.
+    No exemplo desta prova, os dados são fornecidos como números Reais (conforme descrito acima). É preciso calcular o vetor de μ de média e o vetor de σ de desvios padrões de todas as variáveis. Os dados então devem ser normalizados, ou seja, para cada variável, subtraia a média e divida o resultado pelo desvio padrão.
+    Leia os rótulos Ytrain, de todas as amostras de treinamento, ou seja, leia um vetor que contém Ntrain elementos ternários, onde cada linha possui apenas um número que indica o rótulo (0, 1, ou 2).
+    Leia todos os vetores de teste Xtest, ou seja, leia uma matriz de Ntest linhas e D colunas, onde cada linha representa uma amostra.
+    Da mesma forma que é feita para o conjunto de treinamento, normalize os dados de teste, porém, é importante que ao invés de se calcular a média e o desvio padrão novamente, sejam usados os mesmos vetores μ e σ calculados usando o conjunto de treinamento.
+    Crie um vetor de números reais, W, de Ntrain elementos, para armazenar as distâncias entre uma amostras de teste e todas as amostras de treinamento.
+    Para cada vetor de teste Xitest:
+        Crie um vetor de inteiros I, também de Ntrain elementos, para armazenar os índices de proximidade entre as amostras de treinamento e teste. Para isso, inicialize cada elemento deste vetor com os índices indo de 0, 1, 2, ..., Ntrain-1
+        Calcule a distância Euclideana entre esse vetor Xitest e todos os vetores de treinamento Xtrain.
+        Armazene os resultados no vetor W.
+        Relembrando, para um par de vetores: A e B, ambos contendo D elementos, a distância Euclideana é calculada pela seguinte fórmula:
+        d(A,B) = [Σd=1D(Ad - Bd)2]0.5
+        Ordene o vetor de distâncias (W) em ordem crescente.
+        Importante: ao ordenar, W, todas as operações feitas em W também devem ser feitas no vetor I.
+        Inicialize um contador para cada uma das três espécies de flores.
+        Para k indo de 0 a K-1
+            Verifique a classe do k-ésimo elemento, ou seja, o valor da classe=Ytrain[I[k]].
+            Se classe==0, incremente o contador da classe Setosa
+            Se classe==1, incremente o contador da classe Versicolor
+            Se classe==2, incremente o contador da classe Virginica
+        Compare os contadores acima e imprima o valor do que conter o maior valor, ou seja,
+            Se Setosa for o maior de todos, imprima 0
+            Se Versicolor for o maior de todos, imprima 1
+            Se Virginia for o maior de todos, imprima 2
+            Caso contrário, ou seja, se houver empate entre as classes dominantes, imprima -1
+
+Alternativamente, o algoritmo acima pode ser implementado usando structs, removendo a necessidade de se usar um vetor de indices I.
+
+Os dados de entrada serão fornecidos desta maneira:
+
+
+K
+Ntrain
+Ntest
+x0,0 x0,1  x0,2 ... x0,D-1 
+x1,0  x1,1  x1,2 ... x1,D-1  
+.
+.
+.
+xNtrain-1,0  xNtrain-1,1  xNtrain,2  ... xNtrain-1,D-1 
+y0
+y1
+y2
+.
+.
+.
+yNtrain
+x0,0 x0,1  x0,2 ... x0,D-1 
+x1,0  x1,1  x1,2 ... x1,D-1  
+.
+.
+.
+xNtest-1,0  xNtest-1,1  xNtest,2  ... xNtest-1,D-1 
+
+A saída gerada deve conter Ntest linhas, onde cada linha possui o valor 0, 1, 2 ou -1, indicando a classe de flor detectada.
+
+Observação: use double para representar todos os números Reais e int para Inteiros.
+
+Exemplo:
+
+Entrada:
+
+
+1
+10
+5
+5.8 4.0 1.2 0.2
+5.6 2.8 4.9 2.0
+5.3 3.7 1.5 0.2
+6.7 3.1 4.4 1.4
+5.7 3.8 1.7 0.3
+5.6 2.7 4.2 1.3
+6.0 3.0 4.8 1.8
+4.9 2.4 3.3 1.0
+5.8 2.7 3.9 1.2
+6.5 3.2 5.1 2.0
+0
+2
+0
+1
+0
+1
+2
+1
+1
+2
+5.1 2.5 3.0 1.1
+5.4 3.0 4.5 1.5
+5.7 2.8 4.1 1.3
+4.6 3.1 1.5 0.2
+6.4 3.1 5.5 1.8
+
+Saída:
+
+
+1
+1
+1
+0
+2
+
+Para facilitar, o seguinte trecho de código apresenta uma sugestão de solução, com lacunas óbvias. Isso é apenas uma sugestão, você não precisa seguir este exemplo.
+
+Adicionalmente, recomenda-se modificar o código abaixo para usar alocação dinâmica, permitindo que ele seja compilado para ANSI C.
+
+
+/* Compile with:
+   gcc solution.c -lm -pedantic -Wall
+ */
+
+#include<stdio.h>
+#include<math.h>
+
+#define COLS 4
+#define VERBOSE 0
+
+/* Function prototypes */	
+void read_data(double data[][COLS], int rows);
+void read_labels(int labels[], int rows);
+void compute_means(double data[][COLS], double means[COLS], int rows);
+void compute_stds(double data[][COLS], double means[COLS], double stds[COLS], int rows);
+void normalise_data(double data[][COLS], double means[COLS], double stds[COLS], int rows);
+double distance(double x1[COLS], double x2[COLS]);  
+int insertion_sort(double vetor[], int idx[], int N);
+  
+
+int main()
+{  
+  int n_train, n_test, r, c, K, n_survived, n_died;
+
+  scanf("%d", &K);
+  scanf("%d", &n_train);
+  scanf("%d", &n_test);
+
+  double Xtrain[n_train][COLS], Xtest[n_test][COLS],
+    dists[n_test][n_train],
+    means[COLS],
+    stds[COLS];
+  int labels[n_train], idx[n_train];
+
+  /* Load train and test data */
+  read_data(Xtrain, n_train);
+  read_labels(labels, n_train);
+  read_data(Xtest, n_test);
+
+  /* Compute mean, stantard deviation */ 
+  compute_means(Xtrain, means, n_train);
+  compute_stds(Xtrain, means, stds, n_train);  
+
+  /* Normalising the data: */
+  normalise_data(Xtrain, means, stds, n_train);
+  normalise_data(Xtest, means, stds, n_test);
+  
+  /*************** 
+   * Classifying */
+  for(r=0; r < n_test; r++){
+    /* Compute distance matrix. */
+
+    /* Sort the results. */
+
+    /* Classify the sample and print output. */
+  }  
+
+  return 0;
+}
+
+/*************** 
+ * Function definitions */	
+
+void compute_stds(double data[][COLS], double means[COLS], double stds[COLS], int rows){
+  /* Inicializacao */
+  int r, c;
+  for(c=0; c < COLS; c++) stds[c] = 0.0; 
+
+  /* Soma */  
+  for(r=0; r < rows; r++)
+    for(c=0; c < COLS; c++)
+      stds[c] += (data[r][c] - means[c]) * (data[r][c] - means[c]);
+   
+  /* Divisao e raiz*/
+  if(VERBOSE) printf("STDs = ");
+  for(c=0; c < COLS; c++){
+    stds[c] /= rows;
+    stds[c] = sqrt(stds[c]);
+    if(VERBOSE) printf("%lf ", stds[c]);    
+  }
+  if(VERBOSE) printf("\n");
+}
+		   
+double distance(double x1[COLS], double x2[COLS]){
+  int c=0;
+  double d=0;
+  for(; c < COLS; c++) d += (x1[c]-x2[c]) * (x1[c]-x2[c]);
+  return sqrt(d);
+}
+	       
+
